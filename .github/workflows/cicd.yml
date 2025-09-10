@@ -34,15 +34,23 @@ jobs:
 
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
-    - name: Copy docker-compose.yml to server
-      run: scp /home/runner/work/docker-compose-deployment/docker-compose-deployment/docker-compose.yml \
-           ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/app/
 
+    - name: Copy docker-compose.yml to server
+      run: |
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" scp \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          docker-compose.yml \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/app/
 
     - name: Deploy using sshpass
       run: |
-        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
+        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh \
+          -o StrictHostKeyChecking=no \
+          -o UserKnownHostsFile=/dev/null \
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
           cd /home/${{ secrets.SERVER_USER }}/app &&
-          docker-compose pull &&
-          docker-compose up -d
+          docker compose pull &&
+          docker compose up -d --remove-orphans
+        "
 
