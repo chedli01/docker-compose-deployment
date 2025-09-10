@@ -35,14 +35,7 @@ jobs:
     - name: Install sshpass
       run: sudo apt-get install -y sshpass
 
-    - name: Create app directory on server
-      run: |
-        sshpass -p "${{ secrets.SERVER_PASSWORD }}" ssh \
-          -o StrictHostKeyChecking=no \
-          -o UserKnownHostsFile=/dev/null \
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "
-          mkdir -p /home/${{ secrets.SERVER_USER }}/app
-        "
+    
 
     - name: Copy docker-compose.yml to server
       run: |
@@ -50,7 +43,7 @@ jobs:
           -o StrictHostKeyChecking=no \
           -o UserKnownHostsFile=/dev/null \
           docker-compose.yml \
-          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/${{ secrets.SERVER_USER }}/app/
+          ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:/home/
 
     - name: Deploy using sshpass
       run: |
