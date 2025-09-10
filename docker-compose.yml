@@ -5,6 +5,7 @@ services:
        context: .
        dockerfile: frontend/Dockerfile
     container_name: frontend
+    image: chedli01/frontend-work:latest
     depends_on:
       - backend1
       - backend2
@@ -14,7 +15,11 @@ services:
   backend1:
     build: ./backend1
     container_name: backend1
+    image: chedli01/backend1-work:latest
+
   backend2:
     build: ./backend2
     container_name: backend2
+    image: chedli01/backend2-work:latest
+
 
