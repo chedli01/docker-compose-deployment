@@ -15,7 +15,6 @@ build-job:
   script:
     - docker compose build
     - docker compose push
-  only:
-    - gitlab
+  
 
     
